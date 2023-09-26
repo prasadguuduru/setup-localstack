@@ -3,6 +3,7 @@
 [![LocalStack Test](https://github.com/LocalStack/setup-localstack/actions/workflows/ci.yml/badge.svg)](https://github.com/LocalStack/setup-localstack/actions/workflows/ci.yml)
 
 
+
 A GitHub Action to setup [LocalStack](https://github.com/localstack/localstack) on your GitHub Actions runner workflow by:
 
 - Pulling a specific version of the LocalStack Docker Image into the GitHub Action runner.
