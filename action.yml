@@ -45,11 +45,19 @@ runs:
 
     - name: Start LocalStack
       run: |
+        export DOCKER_API_VERSION=1.43
+        docker network create  innovation-sprint
+        
         pip install pyopenssl -U
 
         if [ "$USE_PRO" = true ]; then
-          docker pull localstack/localstack-pro:"$IMAGE_TAG" &
-          CONFIGURATION="$CONFIGURATION DNS_ADDRESS=0"
+          
+          docker-compose up -d && CONFIGURATION="$CONFIGURATION DNS_ADDRESS=0"
+          
+          #docker-compose logs -f localstack
+          pwd
+          terraform init && terraform apply --auto-approve
+          
         else
           docker pull localstack/localstack:"$IMAGE_TAG" &
         fi
@@ -57,12 +65,16 @@ runs:
         pip install localstack
         if [ "$INSTALL_AWSLOCAL" = true ]; then
           pip install awscli-local[ver1]
+          export AWS_ACCESS_KEY_ID='test'
+          export AWS_SECRET_ACCESS_KEY='test'
+          AWS_DEFAULT_REGION='us-east-1'
+          aws s3 ls  --endpoint-url http://s3.localhost.localstack.cloud:4566
         fi
 
         export CI_PROJECT=${{ inputs.ci-project }}
-        eval "${CONFIGURATION} localstack start -d"
+        #eval "${CONFIGURATION} localstack start -d"
 
-        localstack wait -t 30
+        #localstack wait -t 30
 
       shell: bash
       env:
