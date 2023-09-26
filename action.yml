@@ -55,6 +55,13 @@ runs:
           docker-compose up -d && CONFIGURATION="$CONFIGURATION DNS_ADDRESS=0"
           
           #docker-compose logs -f localstack
+          pwd
+          terraform init && terraform apply --auto-approve
+          export AWS_ACCESS_KEY_ID='test'
+          export AWS_SECRET_ACCESS_KEY='test'
+          AWS_DEFAULT_REGION='us-east-1'
+          aws s3 ls  --endpoint-url http://s3.localhost.localstack.cloud:4566
+          
         else
           docker pull localstack/localstack:"$IMAGE_TAG" &
         fi
