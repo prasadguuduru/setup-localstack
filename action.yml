@@ -45,11 +45,16 @@ runs:
 
     - name: Start LocalStack
       run: |
+        export DOCKER_API_VERSION=1.43
+        docker network create  innovation-sprint
+        
         pip install pyopenssl -U
 
         if [ "$USE_PRO" = true ]; then
-          docker pull localstack/localstack-pro:"$IMAGE_TAG" &
-          CONFIGURATION="$CONFIGURATION DNS_ADDRESS=0"
+          
+          docker-compose up -d && CONFIGURATION="$CONFIGURATION DNS_ADDRESS=0"
+          
+          docker-compose logs -f localstack
         else
           docker pull localstack/localstack:"$IMAGE_TAG" &
         fi
@@ -60,9 +65,9 @@ runs:
         fi
 
         export CI_PROJECT=${{ inputs.ci-project }}
-        eval "${CONFIGURATION} localstack start -d"
+        #eval "${CONFIGURATION} localstack start -d"
 
-        localstack wait -t 30
+        #localstack wait -t 30
 
       shell: bash
       env:
