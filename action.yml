@@ -54,7 +54,7 @@ runs:
           
           docker-compose up -d && CONFIGURATION="$CONFIGURATION DNS_ADDRESS=0"
           
-          docker-compose logs -f localstack
+          #docker-compose logs -f localstack
         else
           docker pull localstack/localstack:"$IMAGE_TAG" &
         fi
